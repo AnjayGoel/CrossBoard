@@ -1,2 +1,2 @@
 # CrossBoard
-A cross-platform clipboard
+A cross-platform clipboard app
