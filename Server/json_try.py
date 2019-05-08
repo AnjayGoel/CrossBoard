@@ -1,0 +1,5 @@
+f = open('try', 'a+')
+f.write("This is a test\n"*20)
+f.close()
+f = open('try')
+print(f.readlines())
