@@ -1,1 +1,4 @@
 Server/secret.json
+Server/.idea/*
+Server/__pycache__
+Server/format.csv

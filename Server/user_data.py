@@ -2,10 +2,11 @@ import re
 import json
 import time
 
-def handle_fetch(data, username):
-    req = json.loads(data)
+def handle_fetch(req_info, username):
+    req = json.loads(req_info)
     f = open("/%s/data" % username, 'r')
-    data = map(f.read().split("\n->|",json.loads()))
+    data = map(f.read().split("\n->|", json.loads()))
+    return data
 
 def handle_upload(req, username):
     entry = json.loads(req);

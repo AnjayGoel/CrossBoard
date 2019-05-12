@@ -78,27 +78,27 @@ def verify():
         resp['message'] = "Invalid code"
     return json.dumps(resp)
 
-@app.route("/fetch",methods = ['GET','POST'])
+
+@app.route("/fetch", methods=['GET','POST'])
 def fetch():
     resp = {}
-    data = ""
     if request.method == 'GET':
         username = request.args.get('username')
         p_hash = request.args.get('p_hash')
-        data = request.args.get('data')
+        req = request.args.get('data')
     elif request.method == 'POST':
         username = request.form['username']
         p_hash = request.form['p_hash']
-        data=request.form['data']
-
+        req = request.form['data']
     if login(username, p_hash):
         resp['status'] = 1
-        handle_fetch(data,username)
+        handle_fetch(req, username)
 
     else:
         resp['status'] = 0
         resp['message'] = "Invalid Credentials"
     return json.dumps(resp)
+
 
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
