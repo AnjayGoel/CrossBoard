@@ -7,7 +7,7 @@ import hashlib
 import os
 from user_data import *
 secret = json.loads(open("secret.json").read())
-db = mysql.connect(host="localhost", user=secret["user"], passwd=secret["passwd"], database="test_users")
+db = mysql.connect(host="localhost", user=secret["user"], passwd=secret["passwd"], database="test_user")
 cur = db.cursor()
 
 app = Flask(__name__)
