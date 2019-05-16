@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CrossBoard</string>
+    <string name="server">http://192.168.43.85:5000</string>
 </resources>

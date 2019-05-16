@@ -22,7 +22,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 app:layout_constraintBottom_toTopOf="@+id/passwd"
-                app:layout_constraintTop_toBottomOf="@+id/name" app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintTop_toBottomOf="@+id/user_name" app:layout_constraintStart_toStartOf="@+id/guideline11"
                 app:layout_constraintEnd_toStartOf="@+id/guideline11"/>
 
         <EditText
@@ -33,24 +33,22 @@
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword"
-                app:layout_constraintBottom_toTopOf="@+id/register"
+                app:layout_constraintBottom_toTopOf="@+id/sign_up"
                 app:layout_constraintStart_toStartOf="@+id/guideline11" android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline11"/>
+                app:layout_constraintEnd_toStartOf="@+id/guideline11" app:layout_constraintHorizontal_bias="0.484"/>
 
         <Button
-                android:id="@+id/register"
+                android:id="@+id/sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:text="Register"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
                 app:layout_constraintBottom_toTopOf="@+id/guideline6"
-                app:layout_constraintTop_toTopOf="@+id/guideline6"/>
+                app:layout_constraintTop_toTopOf="@+id/guideline6" app:layout_constraintVertical_bias="0.0"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="@+id/guideline5"/>
 
         <EditText
-                android:id="@+id/name"
+                android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -74,9 +72,9 @@
                 android:textSize="20sp"
                 android:textStyle="normal"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/name"
-                app:layout_constraintEnd_toStartOf="@+id/name"
-                app:layout_constraintTop_toTopOf="@+id/name"
+                app:layout_constraintBottom_toBottomOf="@+id/user_name"
+                app:layout_constraintEnd_toStartOf="@+id/user_name"
+                app:layout_constraintTop_toTopOf="@+id/user_name"
                 app:layout_constraintVertical_bias="0.0"/>
 
         <TextView

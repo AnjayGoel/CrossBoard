@@ -18,6 +18,28 @@ def enter():
     return "Hello There!"
 
 
+@app.route("/login",methods=["POST"])
+def login():
+    resp={}
+    if request.method == 'GET':
+        email = request.args.get('email')
+        p_hash = request.args.get('p_hash')
+    elif request.method == 'POST':
+        email = request.form['email']
+        p_hash = request.form['p_hash']
+    if login(email,p_hash):
+        resp['status'] = 1
+        resp['message'] = "Login Successful"
+        cur.execute("select username from users where email='%s'" % email)
+        res = cur.fetchall()
+        resp['username']=res[0]
+        print(res)
+    else:
+        resp['status'] = 0
+        resp['message'] = "Invalid Credentials"
+    return json.dumps(resp)
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     resp = {}
@@ -155,10 +177,10 @@ def is_pending(email):
 def login (email, p_hash):
     cur.execute("select p_hash from users where email='%s'" % email)
     res=cur.fetchall()
-    if res[0] == p_hash:
-        return True
-    else:
+    if len(res)==0 or res[0] != p_hash:
         return False
+    else:
+        return True
 
 
 app.run(host="0.0.0.0",threaded=True)
