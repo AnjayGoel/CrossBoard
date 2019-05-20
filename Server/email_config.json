@@ -1,6 +1,0 @@
-{
-  "server": "smtp.sendgrid.net",
-  "port": 587,
-  "username": "apikey",
-  "password": "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"
-}
