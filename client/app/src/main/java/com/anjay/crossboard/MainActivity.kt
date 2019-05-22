@@ -2,6 +2,7 @@ package com.anjay.crossboard
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         var sp:SharedPreferences = applicationContext.getSharedPreferences("pref", Context.MODE_PRIVATE)
         var spe:SharedPreferences.Editor=sp.edit()
-        if (!(sp.getBoolean("init",false)) || !is_valid_login(sp.getString("email",""),sp.getString("p_hash",""),this)){
+        if (!(sp.getBoolean("init",false)) || !isValidLogin(sp.getString("email",""),sp.getString("p_hash",""),this)){
                 setContentView(R.layout.welcome)
                 val registerw:Button = findViewById(R.id.register_w)
                 val signinw: Button = findViewById(R.id.signin_w)
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity() {
                             hm["email"] = email.text.toString()
                             hm["p_hash"] = passwd.text.toString()
                             Thread(Runnable {
-                                var msg = request(getString(R.string.server) + "/login", hm, "POST")
+                                var msg = request(getString(R.string.server) + "/login", hm, "POST",true,email.text.toString(),passwd.text.toString())
                                 Log.wtf(tag, msg)
                                 var resp = JSONObject(msg)
 
@@ -125,6 +126,7 @@ class MainActivity : AppCompatActivity() {
                                         spe.putString("p_hash", passwd.text.toString())
                                         spe.putBoolean("init", true)
                                         spe.commit()
+
                                         wait.setMessage(resp.getString("message") + "\n Welcome Back " + resp.getString("username"))
                                     }
                                     else {
@@ -141,6 +143,18 @@ class MainActivity : AppCompatActivity() {
 
             }
         else {
+
+
+            val servIntent = Intent(this,background::class.java)
+            servIntent.putExtra("email",sp.getString("email",""))
+            servIntent.putExtra("p_hash",sp.getString("p_hash",""))
+            startService(servIntent)
+
+            val intent = Intent (this,Home::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+            finish()
+
 
         }
     }

@@ -1,4 +1,5 @@
-Server/*.json
+Server/secret.json
+Server/email_config.json
 Server/.idea/*
 Server/__pycache__
 Server/format.csv
