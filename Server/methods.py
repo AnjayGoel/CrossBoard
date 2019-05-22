@@ -7,7 +7,7 @@ import time
 from pymongo import MongoClient
 from bson.json_util import dumps
 mongo = MongoClient("localhost", 27017)
-db = mongo["CrossBoard"]
+db = mongo["crossboard"]
 users = db["user_data"]
 email_config = json.loads(open("email_config.json").read())
 
@@ -26,25 +26,21 @@ def send_mail(sender_addr, addr, message, subject=""):
 
 
 def add_user(username, email):
-    res = users.insert_one({"name": username, "email": email, "updated": 0, "data": []})
+    res = users.insert_one({"name": username, "email": email, "data": []})
     print(res)
 
 
-def handle_fetch(email, time):
-    res = users.find({"email": email, "entry.time": {"$gt": time}}, {'entry': 1, '_id': 0})
+def handle_fetch(email, req):
+    req = json.loads(req)
+    res = users.find({"email": email, "data.time": {"$gt": req['time']}}, {'data': 1, '_id': 0})
     return dumps(res[0])
 
 
-def handle_upload(email, data):
-    entry = {}
-    entry["data"]=data
-    entry["time"] = int(round(time.time() * 1000))
-    resp = users.update_one({"email": email}, {"$push": {"entry": entry}})
-    users.update_one({"email":email},{"updated":entry["time"]})
-    print(dumps(resp))
-    return '{"status":1,"time":%s}' % entry['time']
+def handle_upload(email, req):
+    req = json.loads(req)
+    req['time'] = int(round(time.time() * 1000))
+    users.update_one({"email": email}, {"$push": {"data": req}})
+    return '{"status":1,"time":%s}' % req['time']
 
 
-def pretty(string):
-    return json.dumps(json.loads(string), indent=4)
-
+print(handle_fetch("angoel123@gmail.com", '{"time":1558281581231}'))

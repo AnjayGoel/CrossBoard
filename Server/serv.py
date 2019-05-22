@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 from flask import request
-from flask_httpauth import HTTPBasicAuth
 import mysql.connector as mysql
 import hashlib
 import os
@@ -11,33 +10,40 @@ db = mysql.connect(host="localhost", user=secret["user"], passwd=secret["passwd"
 cur = db.cursor()
 
 app = Flask(__name__)
-auth = HTTPBasicAuth()
 
 
 @app.route("/")
-@auth.login_required
 def enter():
     return "Hello There!"
 
 
-
 @app.route("/login", methods=["POST"])
-@auth.login_required
 def login_u():
     resp = {}
-    email = auth.username()
-    resp['status'] = 1
-    resp['message'] = "Login Successful"
-    cur.execute("select username from users where email='%s'" % email)
-    res = cur.fetchall()
-    resp['username'] = res[0][0]
-    print(resp)
+    if request.method == 'GET':
+        email = request.args.get('email')
+        p_hash = request.args.get('p_hash')
+    elif request.method == 'POST':
+        email = request.form['email']
+        p_hash = request.form['p_hash']
+    if login(email, p_hash):
+        resp['status'] = 1
+        resp['message'] = "Login Successful"
+        cur.execute("select username from users where email='%s'" % email)
+        res = cur.fetchall()
+        resp['username'] = res[0][0]
+        print(res)
+    else:
+        resp['status'] = 0
+        resp['message'] = "Invalid Credentials"
     return json.dumps(resp)
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     resp = {}
+
+    print("------->" + request.host)
     email = request.form['email']
     p_hash = request.form['p_hash']
     username = request.form['username']
@@ -92,33 +98,48 @@ def verify():
     return json.dumps(resp)
 
 
-@app.route("/get", methods=['GET', 'POST'])
-@auth.login_required
+@app.route("/fetch", methods=['GET', 'POST'])
 def fetch():
-    time=0
-    email = auth.username()
+    resp = {}
     if request.method == 'GET':
-        time = int(request.args.get('time'))
+        email = request.args.get('email')
+        p_hash = request.args.get('p_hash')
+        req = request.args.get('data')
     elif request.method == 'POST':
-        time = int(request.form['time'])
-    
-    resp = handle_fetch (email,time)
-    print (pretty(resp))
-    return pretty(resp)
+        email = request.form['email']
+        p_hash = request.form['p_hash']
+        req = request.form['data']
+    if login(email, p_hash):
+        resp['status'] = 1
+        resp['data'] = handle_fetch(req, email)
+
+    else:
+        resp['status'] = 0
+        resp['message'] = "Invalid Credentials"
+    return json.dumps(resp)
 
 
-@app.route("/post", methods=['GET', 'POST'])
-@auth.login_required
+@app.route("/upload", methods=['GET', 'POST'])
 def upload():
     resp = {}
     data = ""
-    email = auth.username()
     if request.method == 'GET':
+        email = request.args.get('email')
+        p_hash = request.args.get('p_hash')
         data = request.args.get('data')
     elif request.method == 'POST':
+        email = request.form['email']
+        p_hash = request.form['p_hash']
         data = request.form['data']
-    str = handle_upload(email, data)
-    return pretty(str)
+    if login(email, p_hash):
+        resp['status'] = 1
+        handle_upload(data, email)
+
+    else:
+        resp['status'] = 0
+        resp['message'] = "Invalid Credentials"
+
+    return json.dumps(resp)
 
 
 def is_username_taken(username):
@@ -150,7 +171,6 @@ def is_pending(email):
         return True
 
 
-@auth.verify_password
 def login(email, p_hash):
     cur.execute("select p_hash from users where email='%s'" % email)
     res = cur.fetchall()
@@ -158,11 +178,6 @@ def login(email, p_hash):
         return False
     else:
         return True
-
-
-@auth.error_handler
-def auth_error():
-    return pretty('{"status":0,"messsage":"Invalid Credentials"}')
 
 
 app.run(host="0.0.0.0", threaded=True)

@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">CrossBoard</string>
     <string name="server">http://192.168.43.85:5000</string>
-    <string name="title_activity_home">Home</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
 </resources>
