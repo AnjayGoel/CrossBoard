@@ -19,6 +19,7 @@ fun isReachable (url:String):Boolean{
     val url = URL(url)
     val connection = url.openConnection() as HttpURLConnection
     connection.connectTimeout=2000
+    connection.requestMethod="HEAD"
     val code = connection.responseCode
 
     if (code == 200) {

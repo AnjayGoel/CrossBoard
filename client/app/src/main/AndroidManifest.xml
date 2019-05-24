@@ -3,6 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.anjay.crossboard">
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -16,16 +17,11 @@
             android:theme="@style/AppTheme"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <service
-                android:name=".background"
+                android:name=".Background"
                 android:enabled="true"
                 android:exported="true">
         </service>
 
-        <activity
-                android:name=".Home"
-                android:label="@string/title_activity_home"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
         <activity
                 android:name=".MainActivity"
                 android:screenOrientation="portrait">

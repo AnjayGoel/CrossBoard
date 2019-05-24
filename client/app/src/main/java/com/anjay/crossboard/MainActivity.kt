@@ -143,17 +143,11 @@ class MainActivity : AppCompatActivity() {
 
             }
         else {
-
-
-            val servIntent = Intent(this,background::class.java)
+            setContentView(R.layout.wait)
+            val servIntent = Intent(this,Background::class.java)
             servIntent.putExtra("email",sp.getString("email",""))
             servIntent.putExtra("p_hash",sp.getString("p_hash",""))
             startService(servIntent)
-
-            val intent = Intent (this,Home::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-            finish()
 
 
         }

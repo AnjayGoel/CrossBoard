@@ -31,18 +31,20 @@ def add_user(username, email):
 
 
 def handle_fetch(email, time):
-    res = users.find({"email": email, "entry.time": {"$gt": time}}, {'entry': 1, '_id': 0})
-    return dumps(res[0])
+    res =  users.aggregate([{"$match":{"email":email}},{"$project":{"entry":{"$filter":{"input":"$entry", "as":"entry","cond":{"$gt":["$$entry.time",time]}}}}},{"$project":{"_id":0,"entry":1}}])
+    resp=str({"status":1,"Message":"something","data":dumps(res)})
+    return resp
 
 
 def handle_upload(email, data):
     entry = {}
     entry["data"]=data
+    entry["type"]="text" #TODO
     entry["time"] = int(round(time.time() * 1000))
     resp = users.update_one({"email": email}, {"$push": {"entry": entry}})
-    users.update_one({"email":email},{"updated":entry["time"]})
-    print(dumps(resp))
-    return '{"status":1,"time":%s}' % entry['time']
+    users.update_one({"email":email},{"$set":{"updated":entry["time"]}})
+   
+    return '{"status":1,"time":%s,"type":%s}' % (entry['time'],entry["type"])
 
 
 def pretty(string):

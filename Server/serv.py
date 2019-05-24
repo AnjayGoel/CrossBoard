@@ -103,8 +103,7 @@ def fetch():
         time = int(request.form['time'])
     
     resp = handle_fetch (email,time)
-    print (pretty(resp))
-    return pretty(resp)
+    return resp
 
 
 @app.route("/post", methods=['GET', 'POST'])
@@ -118,7 +117,8 @@ def upload():
     elif request.method == 'POST':
         data = request.form['data']
     str = handle_upload(email, data)
-    return pretty(str)
+    print(str)
+    return str
 
 
 def is_username_taken(username):
